@@ -49,6 +49,7 @@ public class NeighboursListTest {
 
     // This is fixed
     private static int ITEMS_COUNT = 12;
+    private static int ITEMS_COUNT_FAVORITE = 1;
 
     private ListNeighbourActivity mActivity;
 
@@ -94,8 +95,6 @@ public class NeighboursListTest {
         recyclerView.perform(actionOnItemAtPosition(0, click()));
 
         onView(ViewMatchers.withId(R.id.neighbour_id)).check(matches(isDisplayed()));
-
-
     }
 
     @Test
@@ -130,7 +129,42 @@ public class NeighboursListTest {
                 .perform( RecyclerViewActions.actionOnItemAtPosition(0,click()));
 
         onView(ViewMatchers.withId(R.id.last_name)).check(matches(withText("Caroline")));
+
     }
+
+    @Test
+    public void neighbourDetails_deleteActionFavorite_shouldRemoveItem(){
+
+        //add neighbour to favorites
+        ViewInteraction recyclerView = onView(
+                allOf(withId(R.id.list_neighbours),
+                        withParent(withId(R.id.container))));
+        recyclerView.perform(actionOnItemAtPosition(0, click()));
+        onView(ViewMatchers.withId(R.id.add_favorite_button)).perform(click());
+        onView(ViewMatchers.withId(R.id.come_back_button)).perform(click());
+
+        //Go to the favorite tab
+        ViewInteraction tabView = onView(
+                allOf(withContentDescription("Favorites"),
+                        childAtPosition(
+                                childAtPosition(
+                                        withId(R.id.tabs),
+                                        0),
+                                1),
+                        isDisplayed()));
+        tabView.perform(click());
+
+       //Check number of favorite
+        onView(ViewMatchers.withId(R.id.list_favorite_neighbours)).check(withItemCount(ITEMS_COUNT_FAVORITE));
+        // Delete a neighbour
+        onView(ViewMatchers.withId(R.id.list_favorite_neighbours))
+                .perform(RecyclerViewActions.actionOnItemAtPosition(0, new DeleteViewAction()));
+        // Then : the number of element is 0
+        onView(ViewMatchers.withId(R.id.list_favorite_neighbours)).check(withItemCount(ITEMS_COUNT_FAVORITE-1));
+
+
+    }
+
 
     private static Matcher<View> childAtPosition(
             final Matcher<View> parentMatcher, final int position) {
