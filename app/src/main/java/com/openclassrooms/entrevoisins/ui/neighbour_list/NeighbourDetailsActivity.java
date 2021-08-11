@@ -1,7 +1,5 @@
 package com.openclassrooms.entrevoisins.ui.neighbour_list;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -9,13 +7,13 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import androidx.appcompat.app.AppCompatActivity;
+
 import com.bumptech.glide.Glide;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.openclassrooms.entrevoisins.R;
 import com.openclassrooms.entrevoisins.model.Neighbour;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Objects;
 
 import butterknife.BindView;
@@ -24,7 +22,6 @@ import butterknife.OnClick;
 
 public class NeighbourDetailsActivity extends AppCompatActivity {
 
-    private List<Neighbour> neighbourList = new ArrayList<Neighbour>();
     private Neighbour neighbour;
 
     @BindView(R.id.neighbour_avatar)
@@ -79,7 +76,7 @@ public class NeighbourDetailsActivity extends AppCompatActivity {
     }
 
     private void initFloatingActionButton() {
-        if (NeighbourFavoritesFragment.mNeighbours.contains(neighbour)) {
+        if (NeighbourFavoritesFragment.mApiService.checkNeighbourExist(neighbour)) {
             deleteFavorite.setVisibility(View.VISIBLE);
             addFavorite.setVisibility(View.GONE);
         } else {
@@ -95,14 +92,14 @@ public class NeighbourDetailsActivity extends AppCompatActivity {
 
     @OnClick(R.id.add_favorite_button)
     void addToFavorite() {
-        NeighbourFavoritesFragment.mNeighbours.add(neighbour);
+        NeighbourFavoritesFragment.mApiService.createNeighbour(neighbour);
         addFavorite.setVisibility(View.GONE);
         deleteFavorite.setVisibility(View.VISIBLE);
     }
 
     @OnClick(R.id.delete_favorite_button)
     void deleteToFavorite() {
-        NeighbourFavoritesFragment.mNeighbours.remove(neighbour);
+        NeighbourFavoritesFragment.mApiService.deleteNeighbour(neighbour);
         addFavorite.setVisibility(View.VISIBLE);
         deleteFavorite.setVisibility(View.GONE);
     }

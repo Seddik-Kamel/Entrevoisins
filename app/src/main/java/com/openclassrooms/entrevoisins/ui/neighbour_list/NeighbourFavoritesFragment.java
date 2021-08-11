@@ -13,14 +13,15 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.openclassrooms.entrevoisins.R;
+import com.openclassrooms.entrevoisins.di.DI;
 import com.openclassrooms.entrevoisins.events.DeleteNeighbourFavoriteEvent;
 import com.openclassrooms.entrevoisins.events.DetailNeighbourFavoriteEvent;
 import com.openclassrooms.entrevoisins.model.Neighbour;
+import com.openclassrooms.entrevoisins.service.NeighbourFavoriteApiService;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -30,7 +31,9 @@ import java.util.List;
  */
 public class NeighbourFavoritesFragment extends Fragment {
 
-    public static List<Neighbour> mNeighbours = new ArrayList<>();
+    public static NeighbourFavoriteApiService mApiService;
+    private List<Neighbour> mNeighbours;
+
     private RecyclerView mRecyclerView;
 
     public NeighbourFavoritesFragment() {
@@ -44,6 +47,7 @@ public class NeighbourFavoritesFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        mApiService = DI.getNeighbourFavoriteApiService();
     }
 
     @Override
@@ -59,6 +63,7 @@ public class NeighbourFavoritesFragment extends Fragment {
     }
 
     private void initList() {
+        mNeighbours = mApiService.getNeighbours();
         if (mNeighbours != null)
             mRecyclerView.setAdapter(new MyNeighbourFavoriteRecyclerViewAdapter(mNeighbours));
     }
