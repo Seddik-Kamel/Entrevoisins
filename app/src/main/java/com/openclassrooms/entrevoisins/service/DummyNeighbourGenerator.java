@@ -40,4 +40,14 @@ public abstract class DummyNeighbourGenerator {
     }
 
     public static List<Neighbour> neighbours = new ArrayList<>();
+
+    static List<Neighbour>generateNeighboursFavorite(){
+        return  new ArrayList<Neighbour>(neighbours);
+    }
+
+    static void createNeighboursFavorite(Neighbour neighbour){
+        neighbours.add(neighbour);
+
+
+    }
 }

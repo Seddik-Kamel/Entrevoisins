@@ -7,7 +7,7 @@ import java.util.List;
 public
 class DummyNeighbourFavoriteApiService implements NeighbourFavoriteApiService {
 
-    private final List<Neighbour> neighbours = DummyNeighbourGenerator.neighbours;
+    private final List<Neighbour> neighbours = DummyNeighbourGenerator.generateNeighboursFavorite();
 
     @Override
     public List<Neighbour> getNeighbours() {

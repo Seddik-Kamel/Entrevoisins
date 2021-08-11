@@ -46,8 +46,7 @@ import org.junit.runner.RunWith;
 public class NeighboursListTest {
 
     // This is fixed
-    private static int ITEMS_COUNT = 12;
-    private static int ITEMS_COUNT_FAVORITE = 1;
+    private static final int ITEMS_COUNT = 12;
 
     private ListNeighbourActivity mActivity;
 
@@ -85,101 +84,5 @@ public class NeighboursListTest {
         onView(ViewMatchers.withId(R.id.list_neighbours)).check(withItemCount(ITEMS_COUNT-1));
     }
 
-    @Test
-    public void myNeighboursList_clickItemList_shouldLaunchNeighbourDetailsActivity(){
-        ViewInteraction recyclerView = onView(
-                allOf(withId(R.id.list_neighbours),
-                        withParent(withId(R.id.container))));
-        recyclerView.perform(actionOnItemAtPosition(0, click()));
 
-        onView(ViewMatchers.withId(R.id.neighbour_id)).check(matches(isDisplayed()));
-    }
-
-    @Test
-    public void neighbourDetails_activityNeighbourDetailsLaunched_shouldDisplayNeighbourName(){
-        ViewInteraction recyclerView = onView(
-                allOf(withId(R.id.list_neighbours),
-                        withParent(withId(R.id.container))));
-        recyclerView.perform(actionOnItemAtPosition(0, click()));
-        onView(ViewMatchers.withId(R.id.last_name)).check(matches(withText("Caroline")));
-    }
-
-    @Test
-    public void neighbourDetails_activityNeighbourDetailsLaunched_shouldDisplayOnlyListFromFavorite(){
-        ViewInteraction recyclerView = onView(
-                allOf(withId(R.id.list_neighbours),
-                        withParent(withId(R.id.container))));
-        recyclerView.perform(actionOnItemAtPosition(0, click()));
-        onView(ViewMatchers.withId(R.id.add_favorite_button)).perform(click());
-        onView(ViewMatchers.withId(R.id.come_back_button)).perform(click());
-
-        ViewInteraction tabView = onView(
-                allOf(withContentDescription("Favorites"),
-                        childAtPosition(
-                                childAtPosition(
-                                        withId(R.id.tabs),
-                                        0),
-                                1),
-                        isDisplayed()));
-        tabView.perform(click());
-        onView(ViewMatchers.withId(R.id.list_favorite_neighbours))
-                .check(withItemCount(1))
-                .perform( RecyclerViewActions.actionOnItemAtPosition(0,click()));
-
-        onView(ViewMatchers.withId(R.id.last_name)).check(matches(withText("Caroline")));
-
-    }
-
-    @Test
-    public void neighbourDetails_deleteActionFavorite_shouldRemoveItem(){
-
-        //add neighbour to favorites
-        ViewInteraction recyclerView = onView(
-                allOf(withId(R.id.list_neighbours),
-                        withParent(withId(R.id.container))));
-        recyclerView.perform(actionOnItemAtPosition(0, click()));
-        onView(ViewMatchers.withId(R.id.add_favorite_button)).perform(click());
-        onView(ViewMatchers.withId(R.id.come_back_button)).perform(click());
-
-        //Go to the favorite tab
-        ViewInteraction tabView = onView(
-                allOf(withContentDescription("Favorites"),
-                        childAtPosition(
-                                childAtPosition(
-                                        withId(R.id.tabs),
-                                        0),
-                                1),
-                        isDisplayed()));
-        tabView.perform(click());
-
-       //Check number of favorite
-        onView(ViewMatchers.withId(R.id.list_favorite_neighbours)).check(withItemCount(ITEMS_COUNT_FAVORITE));
-        // Delete a neighbour
-        onView(ViewMatchers.withId(R.id.list_favorite_neighbours))
-                .perform(RecyclerViewActions.actionOnItemAtPosition(0, new DeleteViewAction()));
-        // Then : the number of element is 0
-        onView(ViewMatchers.withId(R.id.list_favorite_neighbours)).check(withItemCount(ITEMS_COUNT_FAVORITE-1));
-
-
-    }
-
-
-    private static Matcher<View> childAtPosition(
-            final Matcher<View> parentMatcher, final int position) {
-
-        return new TypeSafeMatcher<View>() {
-            @Override
-            public void describeTo(Description description) {
-                description.appendText("Child at position " + position + " in parent ");
-                parentMatcher.describeTo(description);
-            }
-
-            @Override
-            public boolean matchesSafely(View view) {
-                ViewParent parent = view.getParent();
-                return parent instanceof ViewGroup && parentMatcher.matches(parent)
-                        && view.equals(((ViewGroup) parent).getChildAt(position));
-            }
-        };
-    }
 }

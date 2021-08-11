@@ -29,6 +29,13 @@ public class DI {
         return neighbourFavoriteApiService;
     }
 
+    /**
+     * Get always a new instance on @{@link NeighbourFavoriteApiService}. Useful for tests, so we ensure the context is clean.
+     * @return
+     */
+    public static NeighbourFavoriteApiService getNewInstanceApiFavoriteService() {
+        return new DummyNeighbourFavoriteApiService();
+    }
 
 
     /**
