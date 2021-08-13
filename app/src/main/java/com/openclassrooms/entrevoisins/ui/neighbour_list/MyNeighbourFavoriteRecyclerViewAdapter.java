@@ -1,7 +1,5 @@
 package com.openclassrooms.entrevoisins.ui.neighbour_list;
 
-import androidx.recyclerview.widget.RecyclerView;
-
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -9,12 +7,15 @@ import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
+
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 import com.openclassrooms.entrevoisins.R;
-import com.openclassrooms.entrevoisins.events.DeleteNeighbourEvent;
-import com.openclassrooms.entrevoisins.events.DetailNeighbourEvent;
+import com.openclassrooms.entrevoisins.events.DeleteNeighbourFavoriteEvent;
+import com.openclassrooms.entrevoisins.events.DetailNeighbourFavoriteEvent;
 import com.openclassrooms.entrevoisins.model.Neighbour;
 
 import org.greenrobot.eventbus.EventBus;
@@ -24,19 +25,19 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class MyNeighbourRecyclerViewAdapter extends RecyclerView.Adapter<MyNeighbourRecyclerViewAdapter.ViewHolder> {
+public class MyNeighbourFavoriteRecyclerViewAdapter extends RecyclerView.Adapter<MyNeighbourFavoriteRecyclerViewAdapter.ViewHolder> {
 
     private final List<Neighbour> mNeighbours;
     private boolean mIsFromNeighbourFragment;
 
-    public MyNeighbourRecyclerViewAdapter(List<Neighbour> items) {
+    public MyNeighbourFavoriteRecyclerViewAdapter(List<Neighbour> items) {
         mNeighbours = items;
     }
 
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.fragment_neighbour, parent, false);
+                .inflate(R.layout.fragment_neighbour_favorite, parent, false);
         return new ViewHolder(view);
     }
 
@@ -49,8 +50,8 @@ public class MyNeighbourRecyclerViewAdapter extends RecyclerView.Adapter<MyNeigh
                 .apply(RequestOptions.circleCropTransform())
                 .into(holder.mNeighbourAvatar);
 
-        holder.mDeleteButton.setOnClickListener(v -> EventBus.getDefault().post(new DeleteNeighbourEvent(neighbour)));
-        holder.itemView.setOnClickListener(v -> EventBus.getDefault().post(new DetailNeighbourEvent(neighbour)));
+        holder.mDeleteButton.setOnClickListener(v -> EventBus.getDefault().post(new DeleteNeighbourFavoriteEvent(neighbour)));
+        holder.itemView.setOnClickListener(v -> EventBus.getDefault().post(new DetailNeighbourFavoriteEvent(neighbour)));
     }
 
     @Override

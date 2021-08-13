@@ -1,11 +1,14 @@
 package com.openclassrooms.entrevoisins.model;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import java.util.Objects;
 
 /**
  * Model object representing a Neighbour
  */
-public class Neighbour {
+public class Neighbour implements Parcelable {
 
     /** Identifier */
     private long id;
@@ -40,6 +43,64 @@ public class Neighbour {
         this.phoneNumber = phoneNumber;
         this.aboutMe = aboutMe;
     }
+
+    /**
+     * Use when reconstructing User object from parcel
+     * This will be used only by the 'CREATOR'
+     * @param in a parcel to read this object
+     */
+    public Neighbour(Parcel in) {
+        this.id = in.readLong();
+        this.name = in.readString();
+        this.avatarUrl = in.readString();
+        this.address = in.readString();
+        this.phoneNumber = in.readString();
+        this.aboutMe = in.readString();
+    }
+
+    /**
+     * Define the kind of object that you gonna parcel,
+     */
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    /**
+     * Actual object serialization happens here, Write object content
+     * to parcel one by one, reading should be done according to this write order
+     * @param dest parcel
+     * @param flags Additional flags about how the object should be written
+     */
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeLong(id);
+        dest.writeString(name);
+        dest.writeString(avatarUrl);
+        dest.writeString(address);
+        dest.writeString(phoneNumber);
+        dest.writeString(aboutMe);
+    }
+
+    /**
+     * This field is needed for Android to be able to
+     * create new objects, individually or as arrays
+     *
+     * If you don’t do that, Android framework will through exception
+     * Parcelable protocol requires a Parcelable.Creator object called CREATOR
+     */
+    public static final Parcelable.Creator<Neighbour> CREATOR = new Parcelable.Creator<Neighbour>() {
+
+        @Override
+        public Neighbour createFromParcel(Parcel source) {
+            return new Neighbour(source);
+        }
+
+        @Override
+        public Neighbour[] newArray(int size) {
+            return new Neighbour[size];
+        }
+    };
 
     public long getId() {
         return id;
