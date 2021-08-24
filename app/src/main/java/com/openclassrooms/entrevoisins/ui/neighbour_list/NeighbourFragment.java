@@ -2,13 +2,14 @@ package com.openclassrooms.entrevoisins.ui.neighbour_list;
 
 import android.content.Context;
 import android.os.Bundle;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
 
 import com.openclassrooms.entrevoisins.R;
 import com.openclassrooms.entrevoisins.di.DI;
@@ -32,6 +33,7 @@ public class NeighbourFragment extends Fragment {
 
     /**
      * Create and return a new instance
+     *
      * @return @{@link NeighbourFragment}
      */
     public static NeighbourFragment newInstance() {
@@ -39,10 +41,13 @@ public class NeighbourFragment extends Fragment {
         return fragment;
     }
 
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         mApiService = DI.getNeighbourApiService();
+
     }
 
     @Override
@@ -61,7 +66,7 @@ public class NeighbourFragment extends Fragment {
      */
     private void initList() {
         mNeighbours = mApiService.getNeighbours();
-        mRecyclerView.setAdapter(new MyNeighbourRecyclerViewAdapter(mNeighbours));
+        mRecyclerView.setAdapter(new MyNeighbourRecyclerViewAdapter(mNeighbours, NeighbourFragment.class.getSimpleName()));
     }
 
     @Override
@@ -84,21 +89,25 @@ public class NeighbourFragment extends Fragment {
 
     /**
      * Fired if the user clicks on a delete button
+     *
      * @param event
      */
     @Subscribe
     public void onDeleteNeighbour(DeleteNeighbourEvent event) {
-        mApiService.deleteNeighbour(event.neighbour);
+        if (event.canDeleteNeighbour(getClass().getSimpleName())) {
+            mApiService.deleteNeighbour(event.neighbour);
+        }
         initList();
     }
 
     /**
      * Fired if the user clicks on a neighbour for details
+     *
      * @param event
      */
     @Subscribe
     public void onDetailsNeighbour(DetailNeighbourEvent event) {
-        NeighbourDetailsActivity.startNeighbourDetailsActivity(getContext(),event.neighbour);
+        NeighbourDetailsActivity.startNeighbourDetailsActivity(getContext(), event.neighbour);
     }
 }
 
