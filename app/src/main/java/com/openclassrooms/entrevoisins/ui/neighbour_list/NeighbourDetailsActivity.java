@@ -72,6 +72,7 @@ public class NeighbourDetailsActivity extends AppCompatActivity {
     public static void startNeighbourDetailsActivity(Context context, Neighbour neighbour) {
         Intent intent = new Intent(context, NeighbourDetailsActivity.class);
         intent.putExtra(context.getString(R.string.neighbour_key), neighbour);
+        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         context.startActivity(intent);
     }
 

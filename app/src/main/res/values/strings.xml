@@ -6,4 +6,8 @@
     <string name="title_activity_neighbour_details">NeighbourDetailsActivity</string>
     <string name="neighbour_key">neighbour</string>
     <string name="about_me">A propos de moi</string>
+    <string name="title_item_neighbour">Neighbour</string>
+    <string name="title_item_favorite">Favorites</string>
+
 </resources>
+

@@ -1,14 +1,13 @@
 package com.openclassrooms.entrevoisins.ui.neighbour_list;
 
-import androidx.recyclerview.widget.RecyclerView;
-
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
+
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
@@ -27,10 +26,16 @@ import butterknife.ButterKnife;
 public class MyNeighbourRecyclerViewAdapter extends RecyclerView.Adapter<MyNeighbourRecyclerViewAdapter.ViewHolder> {
 
     private final List<Neighbour> mNeighbours;
-    private boolean mIsFromNeighbourFragment;
+    private String provenanceClassName;
+
+    public MyNeighbourRecyclerViewAdapter(List<Neighbour> items, String className) {
+        mNeighbours = items;
+        this.provenanceClassName = className;
+    }
 
     public MyNeighbourRecyclerViewAdapter(List<Neighbour> items) {
         mNeighbours = items;
+        this.provenanceClassName = provenanceClassName;
     }
 
     @Override
@@ -49,8 +54,8 @@ public class MyNeighbourRecyclerViewAdapter extends RecyclerView.Adapter<MyNeigh
                 .apply(RequestOptions.circleCropTransform())
                 .into(holder.mNeighbourAvatar);
 
-        holder.mDeleteButton.setOnClickListener(v -> EventBus.getDefault().post(new DeleteNeighbourEvent(neighbour)));
-        holder.itemView.setOnClickListener(v -> EventBus.getDefault().post(new DetailNeighbourEvent(neighbour)));
+        holder.itemView.setOnClickListener(v -> EventBus.getDefault().post(new DetailNeighbourEvent(neighbour, provenanceClassName)));
+        holder.mDeleteButton.setOnClickListener(v -> EventBus.getDefault().post(new DeleteNeighbourEvent(neighbour, provenanceClassName)));
     }
 
     @Override
