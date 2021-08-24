@@ -2,12 +2,13 @@ package com.openclassrooms.entrevoisins.ui.neighbour_list;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.res.ColorStateList;
 import android.os.Bundle;
-import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.widget.ImageViewCompat;
 
 import com.bumptech.glide.Glide;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -40,8 +41,7 @@ public class NeighbourDetailsActivity extends AppCompatActivity {
     TextView aboutMeDescription;
     @BindView(R.id.add_favorite_button)
     FloatingActionButton addFavorite;
-    @BindView(R.id.delete_favorite_button)
-    FloatingActionButton deleteFavorite;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -78,12 +78,15 @@ public class NeighbourDetailsActivity extends AppCompatActivity {
 
     private void initFloatingActionButton() {
         if (NeighbourFavoritesFragment.mApiService.checkNeighbourExist(neighbour)) {
-            deleteFavorite.setVisibility(View.VISIBLE);
-            addFavorite.setVisibility(View.GONE);
+            changeTint(R.color.yellow);
+
         } else {
-            addFavorite.setVisibility(View.VISIBLE);
-            deleteFavorite.setVisibility(View.GONE);
+            changeTint(R.color.black);
         }
+    }
+
+    private void changeTint(int p) {
+        ImageViewCompat.setImageTintList(addFavorite, ColorStateList.valueOf(getResources().getColor(p)));
     }
 
     @OnClick(R.id.come_back_button)
@@ -93,15 +96,12 @@ public class NeighbourDetailsActivity extends AppCompatActivity {
 
     @OnClick(R.id.add_favorite_button)
     void addToFavorite() {
-        NeighbourFavoritesFragment.mApiService.createNeighbour(neighbour);
-        addFavorite.setVisibility(View.GONE);
-        deleteFavorite.setVisibility(View.VISIBLE);
-    }
-
-    @OnClick(R.id.delete_favorite_button)
-    void deleteToFavorite() {
-        NeighbourFavoritesFragment.mApiService.deleteNeighbour(neighbour);
-        addFavorite.setVisibility(View.VISIBLE);
-        deleteFavorite.setVisibility(View.GONE);
+        if (!NeighbourFavoritesFragment.mApiService.checkNeighbourExist(neighbour)) {
+            NeighbourFavoritesFragment.mApiService.createNeighbour(neighbour);
+            changeTint(R.color.yellow);
+        } else {
+            NeighbourFavoritesFragment.mApiService.deleteNeighbour(neighbour);
+            changeTint(R.color.black);
+        }
     }
 }
